@@ -63,7 +63,7 @@ RSpec.describe Api::V1::BooksController, type: :controller do
         }
       end
 
-      it 'return 201' do
+      it 'returns 201' do
         post :create, {
           params: {
             book: valid_attributes
@@ -72,7 +72,7 @@ RSpec.describe Api::V1::BooksController, type: :controller do
         expect(response.status). to eq(201)
       end
 
-      it 'return in an appropriate structure' do
+      it 'returns in an appropriate structure' do
         post :create, {
           params: {
             book: valid_attributes
@@ -112,13 +112,48 @@ RSpec.describe Api::V1::BooksController, type: :controller do
           release_date: "2019-08-01"
         }
       end
-      it 'return 422' do
+      it 'returns 422' do
         post :create, {
           params: {
             book: invalid_attributes
           }
         }
         expect(response.status). to eq(422)
+      end
+    end
+  end
+
+  describe 'GET #show' do
+    context 'when book exists' do
+      let!(:book) { create(:book)}
+
+      it 'returns 200' do
+        get :show, { params: { id: book.id } }
+        expect(response.status). to eq(200)
+      end
+
+      it 'returns in an appropriate structure' do
+        get :show, { params: { id: book.id } }
+        data = JSON.parse response.body
+        expected_data = {
+          'status' => 'success',
+          'status_code' => 200,
+          'data' => {'name' => book.name,
+                      'isbn' => book.isbn,
+                      'authors' => [book.authors.first],
+                      'number_of_pages' => book.number_of_pages,
+                      'publisher' =>  book.publisher,
+                      'country' => book.country,
+                      'release_date' => book.release_date.to_s(:db)}
+        }
+        expect(data).to eq(expected_data)
+      end
+    end
+
+    context 'when book does not exists' do
+      it 'returns 404' do
+        get :show, { params: { id: -1 } }
+        expect(response.status). to eq(404)
       end
     end
   end
