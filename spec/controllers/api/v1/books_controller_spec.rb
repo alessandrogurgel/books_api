@@ -72,7 +72,18 @@ RSpec.describe Api::V1::BooksController, type: :controller do
         expect(response.status). to eq(201)
       end
 
-      it 'returns in an appropriate structure' do
+      it 'creates the requested book' do
+        expect do
+          post :create, {
+            params: {
+              book: valid_attributes
+            }
+          }
+        end.to change(Book, :count).from(0).to(1)
+
+      end
+
+      it 'returns the created book in an appropriate structure' do
         post :create, {
           params: {
             book: valid_attributes
@@ -132,7 +143,7 @@ RSpec.describe Api::V1::BooksController, type: :controller do
         expect(response.status). to eq(200)
       end
 
-      it 'returns in an appropriate structure' do
+      it 'returns it in an appropriate structure' do
         get :show, { params: { id: book.id } }
         data = JSON.parse response.body
         expected_data = {
@@ -153,6 +164,35 @@ RSpec.describe Api::V1::BooksController, type: :controller do
     context 'when book does not exists' do
       it 'returns 404' do
         get :show, { params: { id: -1 } }
+        expect(response.status). to eq(404)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    context 'when book exists' do
+      let!(:book) { create(:book, name: 'My First Book')}
+
+      it 'destroys the requested book' do
+        expect {
+          delete :destroy, params: { id: book.id }
+        }.to change(Book, :count).by(-1)
+      end
+      it 'returns an appropriate structure' do
+        delete :destroy, params: { id: book.id }
+        data = JSON.parse response.body
+        expected_data = {
+          'status' => 'success',
+          'status_code' => 204,
+          'message' => 'The book My First Book was deleted successfully',
+          'data' => []
+        }
+        expect(data).to eq(expected_data)
+      end
+    end
+    context 'when book does not exist' do
+      it 'returns 404' do
+        delete :destroy, { params: { id: -1 } }
         expect(response.status). to eq(404)
       end
     end

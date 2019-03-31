@@ -25,7 +25,16 @@ class Api::V1::BooksController < ApplicationController
     else
       render json: { message: 'Entity not found' }, status: :not_found
     end
+  end
 
+  # DELETE /books/1
+  def destroy
+    if @book.present?
+      @book.destroy
+      render json: serialize_deleted_book(@book)
+    else
+      render json: { message: 'Entity not found' }, status: :not_found
+    end
   end
 
   private
