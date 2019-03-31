@@ -6,4 +6,14 @@ module BooksSerializer
       data: books
     }
   end
+
+  def serialized_created_book(book, status_code = 201)
+    {
+      status_code: status_code,
+      status: 'success',
+      data: {
+        book: book
+      }
+    }
+  end
 end
