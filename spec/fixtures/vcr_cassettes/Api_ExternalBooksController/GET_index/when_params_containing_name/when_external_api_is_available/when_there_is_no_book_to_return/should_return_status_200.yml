@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.anapioficeandfire.com/api/books?name=wrong%20book%20title
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.anapioficeandfire.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 31 Mar 2019 13:18:52 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - ARRAffinity=91ea15263273edd6770d5e3fadffc2843ff86da20d1cc4b18edf432128fe44c1;Path=/;HttpOnly;Domain=www.anapioficeandfire.com
+      - __cfduid=d774f9296f2e1a0cdef790fa3012353771554038332; expires=Mon, 30-Mar-20
+        13:18:52 GMT; path=/; domain=.anapioficeandfire.com; HttpOnly
+      Vary:
+      - Accept-Encoding
+      Link:
+      - <https://www.anapioficeandfire.com/api/books?name=wrong%20book%20title&page=1&pageSize=10>;
+        rel="first", <https://www.anapioficeandfire.com/api/books?name=wrong%20book%20title&page=1&pageSize=10>;
+        rel="last"
+      X-Powered-By:
+      - ASP.NET
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 4c029c99fa8bc885-MIA
+    body:
+      encoding: ASCII-8BIT
+      string: "[]"
+    http_version: 
+  recorded_at: Sun, 31 Mar 2019 13:18:52 GMT
+recorded_with: VCR 3.0.3
