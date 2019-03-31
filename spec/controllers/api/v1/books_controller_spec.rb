@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe Api::V1::BooksController, type: :controller do
   describe 'GET #index' do
     context 'when there are books' do
-      context 'with no filter params' do
-      end
       it 'returns all books' do
         5.times do
           create(:book)
@@ -43,6 +41,52 @@ RSpec.describe Api::V1::BooksController, type: :controller do
           'data' => []
         }
         expect(data).to eq(expected_data)
+      end
+    end
+
+    context 'when we use searchable params' do
+      before do
+        (1..10).each do |i|
+          create(:book, name: "book #{i}")
+        end
+        2.times do
+          create(:book, country: 'Argentina')
+        end
+
+        3.times do
+          create(:book, publisher: 'Acme Books')
+        end
+
+        4.times do
+          create(:book, release_date: 25.years.ago)
+        end
+      end
+      context 'using name' do
+        it 'returns only one book' do
+          get :index, params: { by_name: 'book 10' }
+          expect(assigns(:books).count).to eq(1)
+        end
+      end
+
+      context 'using country' do
+        it 'returns two books' do
+          get :index, params: { by_country: 'Argentina' }
+          expect(assigns(:books).count).to eq(2)
+        end
+      end
+
+      context 'using publisher' do
+        it 'returns only three books' do
+          get :index, params: { by_publisher: 'Acme Books' }
+          expect(assigns(:books).count).to eq(3)
+        end
+      end
+
+      context 'using release_date' do
+        it 'returns only fourth books' do
+          get :index, params: { by_release_date: 25.years.ago.year }
+          expect(assigns(:books).count).to eq(4)
+        end
       end
     end
   end

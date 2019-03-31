@@ -1,10 +1,15 @@
 class Api::V1::BooksController < ApplicationController
   before_action :set_book, only: [:show, :update, :destroy]
 
+  has_scope :by_name, only: [:index]
+  has_scope :by_publisher, only: [:index]
+  has_scope :by_country, only: [:index]
+  has_scope :by_release_date, only: [:index]
+
   include BooksSerializer
   # GET /books
   def index
-    @books = Book.all
+    @books = apply_scopes(Book).all
     render json: serialize_books(@books)
   end
 
