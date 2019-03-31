@@ -45,6 +45,7 @@ group :test do
   gem 'webmock', '2.3.1'
   gem 'factory_bot_rails', '4.11.1'
   gem 'faker'
+  gem 'rails-controller-testing', '1.0.1'
 end
 
 

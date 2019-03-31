@@ -1,7 +1,7 @@
 module ExternalBooksSerializer
-  def serialize_books(books)
+  def serialize_books(books, status_code = 200)
     {
-      status_code: 200,
+      status_code: status_code,
       status: 'success',
       data: books.map { |b|
         {
