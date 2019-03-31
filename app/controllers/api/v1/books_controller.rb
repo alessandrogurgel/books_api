@@ -37,6 +37,19 @@ class Api::V1::BooksController < ApplicationController
     end
   end
 
+  # PATCH/PUT /books/1
+  def update
+    unless @book.present?
+      render json: { message: 'Entity not found' }, status: :not_found
+      return
+    end
+    if @book.update(book_params)
+      render json: serialize_updated_book(@book)
+    else
+      render json: @book.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_book

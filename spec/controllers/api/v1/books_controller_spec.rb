@@ -169,6 +169,66 @@ RSpec.describe Api::V1::BooksController, type: :controller do
     end
   end
 
+  describe 'PUT #update' do
+    context 'when params are valid' do
+      let!(:valid_attributes) do
+        {
+          name: "My First Book",
+          isbn: "123-3213243567",
+          authors: [
+            "John Doe"
+          ],
+          number_of_pages: 350,
+          publisher: "Acme Books",
+          country: "United States",
+          release_date: "2019-08-01"
+        }
+      end
+      let!(:book){ create(:book) }
+      it 'returns 200' do
+        put :update, { params: { id: book.id, book: valid_attributes } }
+        expect(response.status). to eq(200)
+      end
+
+      it 'returns the updated book in an appropriate structure' do
+        put :update, { params: { id: book.id, book: valid_attributes } }
+        data = JSON.parse response.body
+        expected_data = {
+          'status' => 'success',
+          'status_code' => 200,
+          'message' => 'The book My First Book was updated successfully',
+          'data' => {
+            'name' => "My First Book",
+            'isbn' => "123-3213243567",
+            'authors' => ["John Doe"],
+            'number_of_pages' => 350,
+            'publisher' =>  "Acme Books",
+            'country' => "United States",
+            'release_date' => "2019-08-01"
+          }
+        }
+        expect(data).to eq(expected_data)
+      end
+
+      context 'when element is not found' do
+        it 'returns 404' do
+          put :update, { params: { id: -1 } }
+          expect(response.status). to eq(404)
+        end
+      end
+    end
+
+    context 'when params are invalid' do
+      let!(:book){ create(:book) }
+      let!(:invalid_attributes){ { name: nil } }
+
+      it 'returns 422' do
+        put :update, { params: { id: book.id,book: invalid_attributes } }
+        expect(response.status). to eq(422)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     context 'when book exists' do
       let!(:book) { create(:book, name: 'My First Book')}
