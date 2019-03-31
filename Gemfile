@@ -43,6 +43,8 @@ end
 group :test do
   gem 'vcr', '3.0.3'
   gem 'webmock', '2.3.1'
+  gem 'factory_bot_rails', '4.11.1'
+  gem 'faker'
 end
 
 
